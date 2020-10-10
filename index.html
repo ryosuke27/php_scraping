@@ -6,10 +6,15 @@
   <title>スクレイピングサイト</title>
 </head>
 <body>
-<form class="contact-form" action="scraping.php" method="post">
+<form class="contact-form" action="search.php" method="post">
   <div class="item">
-    <label class="label" for="message">キーワード</label>
-    <input type="text" rows="4" id="message" name="comment">
+    <label class="label" for="key">キーワード</label>
+    <label>経済<input type="radio" name="key" value="economic"></label>
+    <label>IT<input type="radio" name="key" value="IT"></label>
+    <label>ビジネス<input type="radio" name="key" value="business"></label>
+    <label>スポーツ<input type="radio" name="key" value="sports"></label>
+    <label>健康<input type="radio" name="key" value="health"></label>
+    <label>天気<input type="radio" name="key" value="weather"></label>
   </div>
   <div class="item no-label">
     <input type="submit">
