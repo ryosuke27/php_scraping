@@ -23,29 +23,9 @@ $startNum = 1;
 //--------------------------
 // 検索キーワード取得
 //--------------------------
-$key = $_POST['key'];
-switch($key){
-    case economic:
-        $key = "経済";
-    break;
-    case IT:
-        $key = "IT";
-    break;
-    case buisiness:
-        $key = "ビジネス";
-    break;
-    case sports:
-        $key = "スポーツ";
-    break;
-    case health:
-        $key = "健康";
-    break;
-    case weather:
-        $key = "天気";
-    break;
-}
+$key = $_POST['word'];
 
-$query = "{$key} site:www.google.co.jp";
+$query = "{$key} site:https://qiita.com/";
 
 //------------------------------------
 // リクエストパラメータ生成
@@ -55,7 +35,8 @@ $paramAry = array(
                 'key' => $apiKey,
                 'cx' => $searchEngineId,
                 'alt' => 'json',
-                'start' => $startNum
+                'start' => $startNum,
+                'num' => 3
         );
 $param = http_build_query($paramAry);
 
@@ -69,25 +50,15 @@ $ret = json_decode($retJson, true);
 //------------------------------------
 // 結果表示
 //------------------------------------
-
-//画面表示
-//var_dump($ret);
-
-//JSON形式でファイル出力
-file_put_contents(dirname(__FILE__) . "/data/ret_" . $startNum . "_" . date('Ymd_His') . ".txt", $retJson);
-
-//項目を画面表示
 $num = $startNum;
-echo "<h1>検索上位キーワードスクレイピング</h1>";
+echo "<h1>情報共有サイト一括検索</h1>";
 echo "<ul>";
 foreach($ret['items'] as $value){
-    echo "<li>順位:" . $num . "</li><br>\n";
+    echo "<li>No." . $num . "</li><br>\n";
     $html = file_get_contents($value['link']);
     $dom = phpQuery::newDocument($html);
-    echo "<li>タイトル:" . $dom->find('h1')->text() . "<br>\n";
-    // echo "タイトル:" . $value['title'] . "<br>\n";
+    echo "<li>Title:" . $dom->find('h1')->text() . "<br>\n";
     echo "URL:<a href='{$value['link']}'>" . $value['link'] . "</a></li><br>\n";
-    // echo "-------------------------------------------------------------------------<br>\n";
 
     $num++;
 }
