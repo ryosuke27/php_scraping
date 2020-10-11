@@ -1,4 +1,8 @@
+<!DOCTYPE html>
+<html lang="ja">
 <?php
+//スクレイピングファイル読み込み
+require_once("./phpQuery-onefile.php");
 
 
 //------------------------------------
@@ -74,11 +78,36 @@ file_put_contents(dirname(__FILE__) . "/data/ret_" . $startNum . "_" . date('Ymd
 
 //項目を画面表示
 $num = $startNum;
+echo "<h1>検索上位キーワードスクレイピング</h1>";
+echo "<ul>";
 foreach($ret['items'] as $value){
-    echo "順位:" . $num . "<br>\n";
-    echo "タイトル:" . $value['title'] . "<br>\n";
-    echo "URL:<a href='{$value['link']}'>" . $value['link'] . "</a><br>\n";
-    echo "-------------------------------------------------------------------------<br>\n";
+    echo "<li>順位:" . $num . "</li><br>\n";
+    $html = file_get_contents($value['link']);
+    $dom = phpQuery::newDocument($html);
+    echo "<li>タイトル:" . $dom->find('h1')->text() . "<br>\n";
+    // echo "タイトル:" . $value['title'] . "<br>\n";
+    echo "URL:<a href='{$value['link']}'>" . $value['link'] . "</a></li><br>\n";
+    // echo "-------------------------------------------------------------------------<br>\n";
 
     $num++;
 }
+echo "</ul>";
+?>
+<style>
+ul, ol {
+  padding: 0;
+  position: relative;
+}
+
+ul li, ol li, h1 {
+  color: black;
+  border-left: solid 6px #2d8fdd;/*左側の線*/
+  background: #f1f8ff;/*背景色*/
+  margin-bottom: 3px;/*下のバーとの余白*/
+   line-height: 1.5;
+  padding: 0.5em;
+  list-style-type: none!important;/*ポチ消す*/
+}
+</style>
+
+
